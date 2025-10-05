@@ -1,0 +1,58 @@
+obj Calculator {
+    has value: float = 0.0;
+
+    def init(self: Calculator, v: float = 0.0) {
+        self.value = v;
+    }
+
+    def add(self: Calculator, x: float) : float {
+        self.value = self.value + x;
+        return self.value;
+    }
+
+    def sub(self: Calculator, x: float) : float {
+        self.value = self.value - x;
+        return self.value;
+    }
+
+    def mul(self: Calculator, x: float) : float {
+        self.value = self.value * x;
+        return self.value;
+    }
+
+    def div(self: Calculator, x: float) : float {
+        if x == 0.0 { print("Error: division by zero"); return self.value; }
+        self.value = self.value / x;
+        return self.value;
+    }
+
+    def explain(self: Calculator, op: string, operand: float) : string {
+        return str("Performed ", op, " with ", operand, ". Result: ", self.value);
+    }
+}
+
+with entry {
+    calc = Calculator(0.0);
+    print("Simple Jac Calculator (start value 0)");
+    print("Commands: add <n>, sub <n>, mul <n>, div <n>, exit");
+
+    while true {
+        cmd = input("-> ");
+        if cmd == "exit" { break; }
+        parts = cmd.split(" ");
+        if parts.len < 2 { print("Invalid input"); continue; }
+        op = parts[0];
+        if !(parts[1].isdigit() || parts[1].replace(".", "").isdigit()) {
+            print("Operand must be numeric"); continue;
+        }
+        x = float(parts[1]);
+        if op == "add" { calc.add(x); }
+        else if op == "sub" { calc.sub(x); }
+        else if op == "mul" { calc.mul(x); }
+        else if op == "div" { calc.div(x); }
+        else { print("Unknown operation"); continue; }
+        print("Result: ", calc.value);
+        print(calc.explain(op, x));
+    }
+    print("Goodbye!");
+}
